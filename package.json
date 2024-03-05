@@ -1,0 +1,11 @@
+{
+  "name": "google-meet-node",
+  "version": "1.0.0",
+  "description": "a node app for google-meet with sfu-webrtc",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon server.js"
+  },
+  "author": "Tanmay",
+  "license": "MIT"
+}
