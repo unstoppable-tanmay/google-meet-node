@@ -8,6 +8,15 @@ import {
 import { AppData } from "mediasoup-client/lib/types";
 import { Worker } from "mediasoup/node/lib/Worker";
 
+
+/**
+ * Worker
+ * |-> Router(s)
+ *     |-> Producer Transport(s)
+ *         |-> Producer
+ *     |-> Consumer Transport(s)
+ *         |-> Consumer
+ **/
 export let worker: Worker<AppData>;
 export let meets: MeetType = {};
 export let peers: PeersType = {};
