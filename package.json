@@ -1,0 +1,37 @@
+{
+  "name": "google-meet-server",
+  "version": "1.0.0",
+  "description": "a server for google meet clone",
+  "main": "server.ts",
+  "scripts": {
+    "dev": "ts-node src/app.ts",
+    "build": "tsc",
+    "bundle": "watchify public/index.js -o public/bundle.js"
+  },
+  "author": "Tanmay",
+  "license": "ISC",
+  "dependencies": {
+    "@httptoolkit/httpolyglot": "^2.2.1",
+    "@mapbox/node-pre-gyp": "^1.0.11",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "httpolyglot": "^0.1.2",
+    "mediasoup": "^3.14.7",
+    "mediasoup-client": "^3.7.10",
+    "node-pre-gyp": "^0.17.0",
+    "peer": "^1.0.2",
+    "sdp-transform": "^2.14.2",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
+    "uuid": "^9.0.1",
+    "watchify": "^4.0.0",
+    "wrtc": "^0.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
