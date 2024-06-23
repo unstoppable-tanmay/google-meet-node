@@ -8,7 +8,6 @@ import {
   consumers,
   producers,
   transports,
-  setworker,
   setmeets,
   setpeers,
   setconsumers,

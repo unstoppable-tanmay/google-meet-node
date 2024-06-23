@@ -80,6 +80,8 @@ const streamSuccess = (stream) => {
   joinRoom()
 }
 
+
+
 const joinRoom = () => {
   socket.emit('joinRoom', { roomName }, (data) => {
     console.log(`Router RTP Capabilities... ${data.rtpCapabilities}`)
@@ -335,7 +337,6 @@ const connectRecvTransport = async (consumerTransport, remoteProducerId, serverC
     document.getElementById(remoteProducerId).srcObject = new MediaStream([_track])
 
     // the server consumer started with media paused
-    // so we need to inform the server to resume
     socket.emit('consumer-resume', { serverConsumerId: params.serverConsumerId })
   })
 }
