@@ -1,13 +1,13 @@
 import {
-    ConsumerType,
-    MeetType,
-    PeersType,
-    ProducerType,
-    TransportType,
+  ConsumerType,
+  MeetType,
+  PeersType,
+  ProducerType,
+  ReserveMeetType,
+  TransportType,
 } from "../types/types";
 import { AppData } from "mediasoup-client/lib/types";
 import { Worker } from "mediasoup/node/lib/Worker";
-
 
 /**
  * Worker

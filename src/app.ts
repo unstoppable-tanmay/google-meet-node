@@ -1,4 +1,5 @@
 import express from "express";
+var cors = require("cors");
 const app = express();
 
 const https = require("httpolyglot");
@@ -9,18 +10,34 @@ import { Server } from "socket.io";
 import { createWorker } from "./lib/worker";
 import { socketInit } from "./socket/socket";
 
-app.get("*", (req, res, next) => {
-  const path = "/sfu/";
+import { apis } from "./routes/apis";
+import { meets } from "./data/data";
 
-  if (req.path.indexOf(path) == 0 && req.path.length > path.length)
-    return next();
+// app.get("*", (req, res, next) => {
+//   const path = "/sfu/";
 
-  res.send(
-    `You need to specify a room name in the path e.g. 'https://127.0.0.1/sfu/room'`
-  );
-});
+//   if (req.path.indexOf(path) == 0 && req.path.length > path.length)
+//     return next();
 
-app.use("/sfu/:room", express.static(path.join(__dirname, "public")));
+//   res.send(
+//     `You need to specify a room name in the path e.g. 'https://127.0.0.1/sfu/room'`
+//   );
+// });
+
+// app.use("/sfu/:room", express.static(path.join(__dirname, "public")));
+
+// middleware
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true, //access-control-allow-credentials:true
+    optionSuccessStatus: 200,
+  })
+);
+app.use(express.json());
+
+// paths
+app.use("/api", apis);
 
 // SSL cert for HTTPS access
 const options = {
@@ -30,11 +47,13 @@ const options = {
 
 const httpsServer = https.createServer(options, app);
 
-httpsServer.listen(3000, () => {
-  console.log("listening on port: " + 3000);
+httpsServer.listen(3003, () => {
+  console.log("listening on port: " + 3003);
 });
 
-const io = new Server(httpsServer);
+const io = new Server(httpsServer, {
+  cors: { origin: ["http://localhost:3000"], credentials: true },
+});
 
 // socket.io namespace (could represent a room?)
 const connections = io.of("/mediasoup");
@@ -43,4 +62,15 @@ const connections = io.of("/mediasoup");
 createWorker();
 
 // sockets events called here
-socketInit(connections)
+socketInit(connections);
+
+setInterval(() => {
+  console.log(meets);
+  for (const roomId of Object.keys(meets)) {
+    if (meets[roomId].started && meets[roomId].peers?.length == 0) {
+      console.log("closing room - ",roomId)
+      // meets[roomId].router?.close();
+      // delete meets[roomId];
+    }
+  }
+}, 10000);

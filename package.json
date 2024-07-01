@@ -4,8 +4,8 @@
   "description": "a server for google meet clone",
   "main": "server.ts",
   "scripts": {
-    "start": "nodemon src/app.ts",
-    "dev": "ts-node src/app.ts",
+    "start": "ts-node src/app.ts",
+    "dev": "nodemon src/app.ts",
     "build": "tsc",
     "bundle": "watchify src/public/index.js -o src/public/bundle.js"
   },
@@ -22,13 +22,15 @@
     "mediasoup": "^3.14.7",
     "mediasoup-client": "^3.7.10",
     "node-pre-gyp": "^0.17.0",
+    "npm": "^10.8.1",
     "peer": "^1.0.2",
     "sdp-transform": "^2.14.2",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
     "uuid": "^9.0.1",
     "watchify": "^4.0.0",
-    "wrtc": "^0.4.7"
+    "wrtc": "^0.4.7",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20.12.12",

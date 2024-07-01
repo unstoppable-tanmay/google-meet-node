@@ -7,16 +7,19 @@ import {
 import { Socket } from "socket.io";
 
 export type PeerDetailsType = {
-  id?: string;
+  socketId?: string;
+
   name: string;
-  socketId: string;
+  email: string;
+  image?: string;
+
   isAdmin: boolean;
 
-  audio: boolean;
-  video: boolean;
-  screen: boolean;
+  audio?: boolean;
+  video?: boolean;
+  screen?: boolean;
 
-  effect: string;
+  hand?: boolean;
 };
 
 export type PeersType = {
@@ -30,7 +33,7 @@ export type PeersType = {
   };
 };
 
-export type Settings = {
+export type RoomSettings = {
   shareScreen: boolean;
   sendChatMessage: boolean;
   sendReaction: boolean;
@@ -40,18 +43,16 @@ export type Settings = {
   access: "open" | "trusted";
 };
 
-export type MessageType = {
-  roomName: string;
-  socketId: string;
-  message: string;
-};
+export type ReserveMeetType = { roomId: string; schedule: number };
 
 export type MeetType = {
   [roomId: string]: {
-    router: Router;
-    peers: string[];
-    settings: Settings;
-    message?: MessageType[];
+    router: Router | null;
+    peers: PeerDetailsType[];
+    admin: PeerDetailsType;
+    settings: RoomSettings;
+    started: boolean;
+    expire: number;
   };
 };
 
@@ -73,3 +74,11 @@ export type ConsumerType = {
   roomName: string;
   consumer: Consumer;
 };
+
+export type UserType =
+  | {
+      image?: string | undefined | null;
+      name?: string | undefined | null;
+      email?: string | undefined | null;
+    }
+  | undefined;

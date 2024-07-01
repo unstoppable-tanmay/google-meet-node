@@ -181,7 +181,7 @@ const createSendTransport = () => {
       }
     })
 
-    connectSendTransport()
+    // connectSendTransport()
   })
 }
 
