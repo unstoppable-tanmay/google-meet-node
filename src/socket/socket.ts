@@ -9,7 +9,6 @@ import {
   producers,
   transports,
   setmeets,
-  setpeers,
   setconsumers,
   setproducers,
   settransports,
@@ -22,6 +21,7 @@ import { Transport } from "mediasoup/node/lib/Transport";
 import { Consumer } from "mediasoup/node/lib/Consumer";
 import { Producer } from "mediasoup/node/lib/Producer";
 import { mediaEvents } from "./media-events";
+import { manageEvents } from "./manage-events";
 
 export const socketInit = (
   connections: Namespace<
@@ -35,7 +35,10 @@ export const socketInit = (
     console.log(socket.id);
 
     // all mediasoup related events and transports
-    mediaEvents(socket)
+    mediaEvents(socket);
+
+    // manage all events
+    manageEvents(socket, connections);
 
     socket.emit("connection-success", {
       socketId: socket.id,
@@ -51,7 +54,7 @@ export const socketInit = (
 
     socket.on("disconnect", () => {
       // do some cleanup
-      console.log(peers[socket.id].peerDetails.name + " disconnected");
+      console.log(socket.id + " disconnected");
 
       setconsumers(removeItems(consumers, socket.id, "consumer"));
       setproducers(removeItems(producers, socket.id, "producer"));
@@ -62,12 +65,12 @@ export const socketInit = (
         delete peers[socket.id];
 
         // remove socket from room
-        meets[roomName] = {
-          ...meets[roomName],
-          peers: meets[roomName].peers!.filter(
-            (peer) => peer.socketId !== socket.id
-          ),
-        };
+        // meets[roomName] = {
+        //   ...meets[roomName],
+        //   peers: meets[roomName].peers!.filter(
+        //     (peer) => peer.socketId !== socket.id
+        //   ),
+        // };
       }
     });
 
@@ -92,7 +95,9 @@ export const socketInit = (
           return;
         }
 
-        const router1 = await createRoom(
+        socket.join(roomName);
+
+        const router1 = await createRouter(
           roomName,
           roomSettings,
           socket.id,
@@ -116,7 +121,7 @@ export const socketInit = (
       }
     );
 
-    const createRoom = async (
+    const createRouter = async (
       roomName: string,
       roomSettings: RoomSettings,
       socketId: string,
@@ -134,7 +139,6 @@ export const socketInit = (
         meets[roomName] = {
           ...meets[roomName],
           peers: [...meets[roomName].peers, peerDetails],
-          // users: [...meets[roomName].users, peerDetails],
         };
       } else {
         router1 = await worker.createRouter({ mediaCodecs });
@@ -142,11 +146,8 @@ export const socketInit = (
           ...meets[roomName],
           router: router1,
           peers: [...meets[roomName].peers, peerDetails],
-          // users: [...meets[roomName].users, peerDetails],
         };
       }
-
-      // console.log(`Router ID: ${router1.id}`, peers.length);
 
       return router1;
     };

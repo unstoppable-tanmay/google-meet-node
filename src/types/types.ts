@@ -20,6 +20,10 @@ export type PeerDetailsType = {
   screen?: boolean;
 
   hand?: boolean;
+  
+  transports: string[];
+  producers: string[];
+  consumers: string[];
 };
 
 export type PeersType = {
@@ -49,6 +53,7 @@ export type MeetType = {
   [roomId: string]: {
     router: Router | null;
     peers: PeerDetailsType[];
+    allowedPeers: PeerDetailsType[];
     admin: PeerDetailsType;
     settings: RoomSettings;
     started: boolean;

@@ -36,7 +36,14 @@ apis.post(
       meets[id] = {
         router: null,
         started: false,
-        admin: { ...data.user, isAdmin: true },
+        admin: {
+          ...data.user,
+          isAdmin: true,
+          consumers: [],
+          producers: [],
+          transports: [],
+        },
+        allowedPeers: [],
         expire: 2 * 60 * 60 * 1000,
         settings: data.settings,
         peers: [],
@@ -83,10 +90,17 @@ apis.post(
       meets[id] = {
         router: null,
         started: false,
-        admin: { ...data.user, isAdmin: true },
+        admin: {
+          ...data.user,
+          isAdmin: true,
+          consumers: [],
+          producers: [],
+          transports: [],
+        },
+        allowedPeers: [],
         expire: data.schedule,
         settings: data.settings,
-        peers: []
+        peers: [],
       };
 
       res
@@ -129,10 +143,17 @@ apis.post(
       meets[id] = {
         router: null,
         started: false,
-        admin: { ...data.user, isAdmin: true },
+        admin: {
+          ...data.user,
+          isAdmin: true,
+          consumers: [],
+          producers: [],
+          transports: [],
+        },
+        allowedPeers: [],
         expire: 2 * 60 * 60 * 1000,
         settings: data.settings,
-        peers: []
+        peers: [],
       };
 
       res

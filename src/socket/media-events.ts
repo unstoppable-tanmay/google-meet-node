@@ -16,7 +16,6 @@ import { Consumer } from "mediasoup/node/lib/Consumer";
 import { Producer } from "mediasoup/node/lib/Producer";
 import { Router } from "mediasoup/node/lib/types";
 
-
 export const mediaEvents = (socket: Socket) => {
   // Client emits a request to create server side Transport
   // We need to differentiate between the producer and consumer transports
@@ -53,11 +52,10 @@ export const mediaEvents = (socket: Socket) => {
     roomName: string,
     consumer: Consumer
   ) => {
-    let loctransports = [
+    settransports([
       ...transports,
       { socketId: socket.id, transport, roomName, consumer },
-    ];
-    settransports(loctransports);
+    ]);
 
     peers[socket.id] = {
       ...peers[socket.id],
@@ -66,11 +64,7 @@ export const mediaEvents = (socket: Socket) => {
   };
 
   const addProducer = (producer: Producer, roomName: string) => {
-    let locproducers = [
-      ...producers,
-      { socketId: socket.id, producer, roomName },
-    ];
-    setproducers(locproducers);
+    setproducers([...producers, { socketId: socket.id, producer, roomName }]);
 
     peers[socket.id] = {
       ...peers[socket.id],
@@ -80,11 +74,7 @@ export const mediaEvents = (socket: Socket) => {
 
   const addConsumer = (consumer: Consumer, roomName: string) => {
     // add the consumer to the consumers list
-    let locconsumers = [
-      ...consumers,
-      { socketId: socket.id, consumer, roomName },
-    ];
-    setconsumers(locconsumers);
+    setconsumers([...consumers, { socketId: socket.id, consumer, roomName }]);
 
     // add the consumer id to the peers list
     peers[socket.id] = {
@@ -280,44 +270,41 @@ export const mediaEvents = (socket: Socket) => {
   });
 };
 
-
-
 const createWebRtcTransport = async (router: Router) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        // https://mediasoup.org/documentation/v3/mediasoup/api/#WebRtcTransportOptions
-        const webRtcTransport_options = {
-          listenIps: [
-            {
-              ip: "0.0.0.0", // replace with relevant IP address
-              announcedIp: "192.168.137.1",
-            },
-          ],
-          enableUdp: true,
-          enableTcp: true,
-          preferUdp: true,
-        };
-  
-        // https://mediasoup.org/documentation/v3/mediasoup/api/#router-createWebRtcTransport
-        let transport = await router.createWebRtcTransport(
-          webRtcTransport_options
-        );
-        console.log(`transport id: ${transport.id}`);
-  
-        transport.on("dtlsstatechange", (dtlsState) => {
-          if (dtlsState === "closed") {
-            transport.close();
-          }
-        });
-  
-        transport.on("@close", () => {
-          console.log("transport closed");
-        });
-  
-        resolve(transport);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  };
-  
+  return new Promise(async (resolve, reject) => {
+    try {
+      // https://mediasoup.org/documentation/v3/mediasoup/api/#WebRtcTransportOptions
+      const webRtcTransport_options = {
+        listenIps: [
+          {
+            ip: "0.0.0.0", // replace with relevant IP address
+            announcedIp: "192.168.137.1",
+          },
+        ],
+        enableUdp: true,
+        enableTcp: true,
+        preferUdp: true,
+      };
+
+      // https://mediasoup.org/documentation/v3/mediasoup/api/#router-createWebRtcTransport
+      let transport = await router.createWebRtcTransport(
+        webRtcTransport_options
+      );
+      console.log(`transport id: ${transport.id}`);
+
+      transport.on("dtlsstatechange", (dtlsState) => {
+        if (dtlsState === "closed") {
+          transport.close();
+        }
+      });
+
+      transport.on("@close", () => {
+        console.log("transport closed");
+      });
+
+      resolve(transport);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
