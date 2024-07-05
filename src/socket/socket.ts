@@ -39,9 +39,10 @@ export const socketInit = (
 
     // manage all events
     manageEvents(socket, connections);
-
-    socket.emit("connection-success", {
-      socketId: socket.id,
+    socket.on("start-meet", () => {
+      socket.emit("connection-success", {
+        socketId: socket.id,
+      });
     });
 
     const removeItems = (
