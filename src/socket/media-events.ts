@@ -139,6 +139,7 @@ export const mediaEvents = (socket: Socket) => {
       const producer = await getTransport(socket.id).produce({
         kind,
         rtpParameters,
+        appData,
       });
 
       // add producer to the producers array
@@ -204,6 +205,10 @@ export const mediaEvents = (socket: Socket) => {
             producerId: remoteProducerId,
             rtpCapabilities,
             paused: true,
+            appData: {
+              socketId: producers.find((e) => e.producer.id == remoteProducerId)
+                ?.socketId,
+            },
           });
 
           consumer.on("transportclose", () => {
@@ -237,6 +242,7 @@ export const mediaEvents = (socket: Socket) => {
             kind: consumer.kind,
             rtpParameters: consumer.rtpParameters,
             serverConsumerId: consumer.id,
+            appData: consumer.appData,
           };
 
           // send the parameters to the client

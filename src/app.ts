@@ -52,7 +52,7 @@ httpsServer.listen(3003, () => {
 });
 
 const io = new Server(httpsServer, {
-  cors: { origin: ["http://localhost:3000"], credentials: true },
+  cors: { origin: ["http://localhost:3000"], credentials: true }
 });
 
 // socket.io namespace (could represent a room?)
@@ -64,13 +64,13 @@ createWorker();
 // sockets events called here
 socketInit(connections);
 
-// setInterval(() => {
-//   console.log(meets);
-//   for (const roomId of Object.keys(meets)) {
-//     if (meets[roomId].started && meets[roomId].peers?.length == 0) {
-//       console.log("closing room - ",roomId)
-//       // meets[roomId].router?.close();
-//       // delete meets[roomId];
-//     }
-//   }
-// }, 10000);
+setInterval(() => {
+  console.log(meets);
+  for (const roomId of Object.keys(meets)) {
+    if (meets[roomId].peers?.length == 0) {
+      console.log("closing room - ", roomId);
+      meets[roomId].router?.close();
+      delete meets[roomId];
+    }
+  }
+}, 10000);

@@ -39,6 +39,7 @@ export const socketInit = (
 
     // manage all events
     manageEvents(socket, connections);
+    
     socket.on("start-meet", () => {
       socket.emit("connection-success", {
         socketId: socket.id,
@@ -142,7 +143,10 @@ export const socketInit = (
           peers: [...meets[roomName].peers, peerDetails],
         };
       } else {
-        router1 = await worker.createRouter({ mediaCodecs });
+        router1 = await worker.createRouter({
+          mediaCodecs,
+          appData: { roomName },
+        });
         meets[roomName] = {
           ...meets[roomName],
           router: router1,

@@ -2,7 +2,7 @@ import { Socket } from "socket.io";
 import { meets } from "../data/data";
 import { Namespace } from "socket.io";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
-import { PeerDetailsType, RoomSettings } from "../types/types";
+import { PeerDetailsType, RoomSettings, UserType } from "../types/types";
 
 export const manageEvents = (
   socket: Socket,
@@ -16,18 +16,34 @@ export const manageEvents = (
   // Asking For Join Event
   socket.on(
     "ask-join",
-    (data: { user: PeerDetailsType; roomName: string }, callback) => {
+    async (data: { user: UserType; roomName: string }, callback) => {
       const admins = meets[data.roomName].peers
         .filter((e) => e.email == meets[data.roomName].admin.email)
         .filter((e) => e.socketId)
         .map((e) => e.socketId!);
 
-      connections.to(admins).emit("asking-join", { user: data.user });
+      console.log("ask-join");
 
-      socket.on("admin-response", (response) => {
-        if (response) callback(true);
-        else callback(false);
-      });
+      connections
+        .to(admins)
+        .timeout(30000)
+        .emit(
+          "asking-join",
+          { user: data.user },
+          (err: any, responses: any) => {
+            console.log(responses[0]);
+            // callback(data);
+          }
+        );
+
+      // callback(false);
+
+      return;
+
+      // socket.on("admin-response", (response) => {
+      //   if (response) callback(true);
+      //   else callback(false);
+      // });
     }
   );
 
