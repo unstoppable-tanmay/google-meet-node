@@ -192,6 +192,8 @@ export const mediaEvents = (socket: Socket) => {
             transportData.consumer &&
             transportData.transport.id == serverConsumerTransportId
         )!.transport;
+        const producer = producers.find(e=>e.producer.id===remoteProducerId)
+        console.log("Producer : ", producer)
 
         // check if the router can consume the specified producer
         if (
@@ -205,10 +207,11 @@ export const mediaEvents = (socket: Socket) => {
             producerId: remoteProducerId,
             rtpCapabilities,
             paused: true,
-            appData: {
-              socketId: producers.find((e) => e.producer.id == remoteProducerId)
-                ?.socketId,
-            },
+            appData: producer?.producer.appData,
+            // appData: {
+            //   socketId: producers.find((e) => e.producer.id == remoteProducerId)
+            //     ?.socketId,
+            // },
           });
 
           consumer.on("transportclose", () => {

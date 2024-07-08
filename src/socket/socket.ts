@@ -39,7 +39,7 @@ export const socketInit = (
 
     // manage all events
     manageEvents(socket, connections);
-    
+
     socket.on("start-meet", () => {
       socket.emit("connection-success", {
         socketId: socket.id,
@@ -115,11 +115,19 @@ export const socketInit = (
           peerDetails: peerDetails,
         };
 
+        socket
+          .to(roomName)
+          .emit("new-join", {
+            socketId: socket.id,
+            peerDetails,
+            meetDetails: meets[roomName],
+          });
+
         // get Router RTP Capabilities
         const rtpCapabilities = router1.rtpCapabilities;
 
         // call callback from the client and send back the rtpCapabilities
-        callback({ rtpCapabilities });
+        callback({ rtpCapabilities, meetDetails: meets[roomName] });
       }
     );
 

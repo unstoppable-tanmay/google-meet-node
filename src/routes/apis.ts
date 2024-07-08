@@ -38,10 +38,6 @@ apis.post(
         started: false,
         admin: {
           ...data.user,
-          isAdmin: true,
-          consumers: [],
-          producers: [],
-          transports: [],
         },
         allowedPeers: [],
         expire: 2 * 60 * 60 * 1000,
@@ -92,10 +88,6 @@ apis.post(
         started: false,
         admin: {
           ...data.user,
-          isAdmin: true,
-          consumers: [],
-          producers: [],
-          transports: [],
         },
         allowedPeers: [],
         expire: data.schedule,
@@ -145,10 +137,6 @@ apis.post(
         started: false,
         admin: {
           ...data.user,
-          isAdmin: true,
-          consumers: [],
-          producers: [],
-          transports: [],
         },
         allowedPeers: [],
         expire: 2 * 60 * 60 * 1000,

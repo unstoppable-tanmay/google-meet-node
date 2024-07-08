@@ -2,7 +2,13 @@ import { Socket } from "socket.io";
 import { meets } from "../data/data";
 import { Namespace } from "socket.io";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
-import { PeerDetailsType, RoomSettings, UserType } from "../types/types";
+import {
+  MeetTransactType,
+  MeetType,
+  PeerDetailsType,
+  RoomSettings,
+  UserType,
+} from "../types/types";
 
 export const manageEvents = (
   socket: Socket,
@@ -32,18 +38,8 @@ export const manageEvents = (
           { user: data.user },
           (err: any, responses: any) => {
             console.log(responses[0]);
-            // callback(data);
           }
         );
-
-      // callback(false);
-
-      return;
-
-      // socket.on("admin-response", (response) => {
-      //   if (response) callback(true);
-      //   else callback(false);
-      // });
     }
   );
 
@@ -54,9 +50,11 @@ export const manageEvents = (
 
   // Room Settings Update
   socket.on(
-    "setting-update",
-    (data: { setting: RoomSettings; roomName: string }) => {
-      meets[data.roomName].settings = data.setting;
+    "room-update",
+    ({ room, roomName }: { room: MeetTransactType; roomName: string }) => {
+      meets[roomName] = { ...meets[roomName], ...room };
     }
   );
+
+  
 };

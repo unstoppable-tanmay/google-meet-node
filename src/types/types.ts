@@ -13,17 +13,11 @@ export type PeerDetailsType = {
   email: string;
   image?: string;
 
-  isAdmin: boolean;
+  audio: boolean;
+  video: boolean;
+  screen: boolean;
 
-  audio?: boolean;
-  video?: boolean;
-  screen?: boolean;
-
-  hand?: boolean;
-  
-  transports: string[];
-  producers: string[];
-  consumers: string[];
+  hand: boolean;
 };
 
 export type PeersType = {
@@ -47,14 +41,26 @@ export type RoomSettings = {
   access: "open" | "trusted";
 };
 
-export type ReserveMeetType = { roomId: string; schedule: number };
+export type AdminType = {
+  name: string;
+  email: string;
+  image?: string;
+}
+
+export type MeetTransactType = {
+  peers: PeerDetailsType[];
+  admin: AdminType;
+  settings: RoomSettings;
+  started: boolean;
+  expire: number;
+};
 
 export type MeetType = {
   [roomId: string]: {
     router: Router | null;
     peers: PeerDetailsType[];
     allowedPeers: PeerDetailsType[];
-    admin: PeerDetailsType;
+    admin: AdminType;
     settings: RoomSettings;
     started: boolean;
     expire: number;
