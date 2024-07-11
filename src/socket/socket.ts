@@ -67,12 +67,16 @@ export const socketInit = (
         delete peers[socket.id];
 
         // remove socket from room
-        // meets[roomName] = {
-        //   ...meets[roomName],
-        //   peers: meets[roomName].peers!.filter(
-        //     (peer) => peer.socketId !== socket.id
-        //   ),
-        // };
+        meets[roomName] = {
+          ...meets[roomName],
+          allowedPeers: [
+            ...meets[roomName].allowedPeers,
+            meets[roomName].peers.find((e) => e.socketId == socket.id)!,
+          ],
+          peers: meets[roomName].peers!.filter(
+            (peer) => peer.socketId !== socket.id
+          ),
+        };
       }
     });
 
@@ -115,13 +119,11 @@ export const socketInit = (
           peerDetails: peerDetails,
         };
 
-        socket
-          .to(roomName)
-          .emit("new-join", {
-            socketId: socket.id,
-            peerDetails,
-            meetDetails: meets[roomName],
-          });
+        socket.to(roomName).emit("new-join", {
+          socketId: socket.id,
+          peerDetails,
+          meetDetails: meets[roomName],
+        });
 
         // get Router RTP Capabilities
         const rtpCapabilities = router1.rtpCapabilities;

@@ -13,19 +13,6 @@ import { socketInit } from "./socket/socket";
 import { apis } from "./routes/apis";
 import { meets } from "./data/data";
 
-// app.get("*", (req, res, next) => {
-//   const path = "/sfu/";
-
-//   if (req.path.indexOf(path) == 0 && req.path.length > path.length)
-//     return next();
-
-//   res.send(
-//     `You need to specify a room name in the path e.g. 'https://127.0.0.1/sfu/room'`
-//   );
-// });
-
-// app.use("/sfu/:room", express.static(path.join(__dirname, "public")));
-
 // middleware
 app.use(
   cors({
@@ -52,7 +39,7 @@ httpsServer.listen(3003, () => {
 });
 
 const io = new Server(httpsServer, {
-  cors: { origin: ["http://localhost:3000"], credentials: true }
+  cors: { origin: ["http://localhost:3000"], credentials: true },
 });
 
 // socket.io namespace (could represent a room?)
@@ -70,7 +57,9 @@ setInterval(() => {
     if (meets[roomId].peers?.length == 0) {
       console.log("closing room - ", roomId);
       meets[roomId].router?.close();
-      delete meets[roomId];
+      setTimeout(() => {
+        delete meets[roomId];
+      }, 5000);
     }
   }
 }, 10000);
