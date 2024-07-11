@@ -69,11 +69,11 @@ export const socketInit = (
         // remove socket from room
         meets[roomName] = {
           ...meets[roomName],
-          allowedPeers: [
-            ...meets[roomName].allowedPeers,
-            meets[roomName].peers.find((e) => e.socketId == socket.id)!,
-          ],
-          peers: meets[roomName].peers!.filter(
+          // allowedPeers: [
+          //   ...meets[roomName].allowedPeers,
+          //   meets[roomName].peers.find((e) => e.socketId == socket.id)!,
+          // ],
+          peers: meets[roomName]?.peers?.filter(
             (peer) => peer.socketId !== socket.id
           ),
         };
