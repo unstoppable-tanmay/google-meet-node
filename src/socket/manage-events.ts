@@ -50,11 +50,13 @@ export const manageEvents = (
 
   // Room Settings Update
   socket.on(
-    "room-update",
-    ({ room, roomName }: { room: MeetTransactType; roomName: string }) => {
-      meets[roomName] = { ...meets[roomName], ...room };
+    "peer-update",
+    ({ peer, roomName }: { peer: PeerDetailsType; roomName: string }) => {
+      if (peer)
+        meets[roomName].peers = meets[roomName].peers.map((e) =>
+          e.socketId == peer.socketId ? peer : e
+        );
+      socket.to(roomName).emit("peer-update", { peer });
     }
   );
-
-  
 };

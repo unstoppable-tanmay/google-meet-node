@@ -8,7 +8,6 @@ import {
   consumers,
   producers,
   transports,
-  setmeets,
   setconsumers,
   setproducers,
   settransports,
@@ -16,10 +15,6 @@ import {
 import { PeerDetailsType, RoomSettings } from "../types/types";
 import { Router } from "mediasoup/node/lib/Router";
 import { mediaCodecs } from "../constants/mediaCodecs";
-import { WebRtcTransport } from "mediasoup/node/lib/WebRtcTransport";
-import { Transport } from "mediasoup/node/lib/Transport";
-import { Consumer } from "mediasoup/node/lib/Consumer";
-import { Producer } from "mediasoup/node/lib/Producer";
 import { mediaEvents } from "./media-events";
 import { manageEvents } from "./manage-events";
 
@@ -127,6 +122,10 @@ export const socketInit = (
 
         // get Router RTP Capabilities
         const rtpCapabilities = router1.rtpCapabilities;
+
+        // socket
+        //   .to(roomName)
+        //   .emit("room-update", meets[roomName] as MeetTransactType);
 
         // call callback from the client and send back the rtpCapabilities
         callback({ rtpCapabilities, meetDetails: meets[roomName] });
