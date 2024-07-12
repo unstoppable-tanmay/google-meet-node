@@ -52,7 +52,7 @@ createWorker();
 socketInit(connections);
 
 setInterval(() => {
-  console.log(meets);
+  // console.log(meets);
   for (const roomId of Object.keys(meets)) {
     if (meets[roomId]?.peers?.length == 0 && meets[roomId]?.started) {
       console.log("closing room - ", roomId);

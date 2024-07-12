@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { meets } from "../data/data";
+import { meets, peers } from "../data/data";
 import { Namespace } from "socket.io";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import {
@@ -50,13 +50,27 @@ export const manageEvents = (
 
   // Room Settings Update
   socket.on(
-    "peer-update",
-    ({ peer, roomName }: { peer: PeerDetailsType; roomName: string }) => {
-      if (peer)
-        meets[roomName].peers = meets[roomName].peers.map((e) =>
-          e.socketId == peer.socketId ? peer : e
-        );
-      socket.to(roomName).emit("peer-update", { peer });
+    "user-update",
+    ({
+      socketId,
+      roomName,
+      data,
+    }: {
+      socketId: string;
+      data: Partial<PeerDetailsType>;
+      roomName: string;
+    }) => {
+      if (socketId && data && roomName) {
+        meets[roomName].peers = meets[roomName].peers.map((e) => {
+          if (e.socketId == socketId) {
+            return { ...e, ...data };
+          } else return e;
+        });
+
+        socket
+          .to(meets[roomName].peers.map((e) => e.socketId!))
+          .emit("meet-update", { meet: meets[roomName] });
+      }
     }
   );
 };
