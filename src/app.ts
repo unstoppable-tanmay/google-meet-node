@@ -31,7 +31,7 @@ import {
 // middleware
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [process.env.FRONTEND_URL ?? ""],
     credentials: true, //access-control-allow-credentials:true
     optionSuccessStatus: 200,
   })
@@ -54,7 +54,7 @@ httpsServer.listen(3003, () => {
 });
 
 const io = new Server(httpsServer, {
-  cors: { origin: ["http://localhost:3000"], credentials: true },
+  cors: { origin: [process.env.FRONTEND_URL ?? ""], credentials: true },
 });
 
 // socket.io namespace (could represent a room?)
@@ -87,7 +87,7 @@ schedule("*/10 * * * *", (time) => {
       consumers.map((e) => {
         if (e.roomName == roomId) e.consumer.close();
       });
-  
+
       setTimeout(() => {
         delete meets[roomId];
       }, meets[roomId].expire);
