@@ -64,14 +64,14 @@ export const socketInit = (
         // remove socket from room
         meets[roomName] = {
           ...meets[roomName],
-          // allowedPeers: [
-          //   ...meets[roomName].allowedPeers,
-          //   meets[roomName].peers.find((e) => e.socketId == socket.id)!,
-          // ],
           peers: meets[roomName]?.peers?.filter(
             (peer) => peer.socketId !== socket.id
           ),
         };
+
+        socket
+          .to(meets[roomName].peers.map((e) => e.socketId!))
+          .emit("meet-update", { meet: meets[roomName] });
       }
     });
 
@@ -159,6 +159,7 @@ export const socketInit = (
         meets[roomName] = {
           ...meets[roomName],
           router: router1,
+          started: true,
           peers: [...meets[roomName].peers, peerDetails],
         };
       }

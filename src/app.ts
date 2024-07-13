@@ -1,17 +1,32 @@
 import express from "express";
+
+import { validate, schedule } from "node-cron";
+import { exec, spawn } from "child_process";
+import { platform } from "os";
+
 var cors = require("cors");
 const app = express();
 
 const https = require("httpolyglot");
 import fs from "fs";
-import path from "path";
 
 import { Server } from "socket.io";
 import { createWorker } from "./lib/worker";
 import { socketInit } from "./socket/socket";
 
 import { apis } from "./routes/apis";
-import { meets } from "./data/data";
+import {
+  consumers,
+  meets,
+  peers,
+  producers,
+  setconsumers,
+  setmeets,
+  setpeers,
+  setproducers,
+  settransports,
+  transports,
+} from "./data/data";
 
 // middleware
 app.use(
@@ -51,15 +66,45 @@ createWorker();
 // sockets events called here
 socketInit(connections);
 
-setInterval(() => {
-  // console.log(meets);
+schedule("*/10 * * * *", (time) => {
+  console.log("Running room obserbe");
   for (const roomId of Object.keys(meets)) {
+    console.log(meets);
     if (meets[roomId]?.peers?.length == 0 && meets[roomId]?.started) {
       console.log("closing room - ", roomId);
       meets[roomId].router?.close();
+      for (const socketId in peers) {
+        if (peers[socketId].roomName === roomId) {
+          delete peers[socketId];
+        }
+      }
+      transports.map((e) => {
+        if (e.roomName == roomId) e.transport.close();
+      });
+      producers.map((e) => {
+        if (e.roomName == roomId) e.producer.close();
+      });
+      consumers.map((e) => {
+        if (e.roomName == roomId) e.consumer.close();
+      });
+  
       setTimeout(() => {
         delete meets[roomId];
-      }, 5000);
+      }, meets[roomId].expire);
     }
   }
-}, 10000);
+});
+
+// TODO this is for the time of not completed project after completion i have to remove it
+const refreshServer = () => {
+  setmeets({});
+  setpeers({});
+  setconsumers([]);
+  setproducers([]);
+  settransports([]);
+};
+validate("0 0 * * *") &&
+  schedule("0 0 * * *", (time) => {
+    console.log("Running server refresh job at midnight");
+    refreshServer();
+  });

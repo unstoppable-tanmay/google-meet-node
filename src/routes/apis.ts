@@ -139,7 +139,7 @@ apis.post(
           ...data.user,
         },
         allowedPeers: [],
-        expire: 2 * 60 * 60 * 1000,
+        expire: 1 * 60 * 60 * 1000,
         settings: data.settings,
         peers: [],
       };

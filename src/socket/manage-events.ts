@@ -23,25 +23,28 @@ export const manageEvents = (
   socket.on(
     "ask-join",
     async (data: { user: UserType; roomName: string }, callback) => {
-      const admins = meets[data.roomName].peers
-        .filter((e) => e.email == meets[data.roomName].admin.email)
-        .filter((e) => e.socketId)
-        .map((e) => e.socketId!);
+      if (meets[data.roomName]) {
+        console.log(data.user, data.roomName);
+        const admins = meets[data.roomName].peers
+          .filter((e) => e.email == meets[data.roomName].admin.email)
+          .filter((e) => e.socketId)
+          .map((e) => e.socketId!);
 
-      console.log("ask-join");
-
-      connections
-        .to(admins)
-        .timeout(30000)
-        .emit(
-          "asking-join",
-          { user: data.user },
-          (err: any, responses: any) => {
-            console.log(responses[0]);
-          }
-        );
+        connections
+          .to(admins)
+          .timeout(60000)
+          .emit(
+            "asking-join",
+            { user: data.user },
+            (err: any, responses: any) => {
+              callback(responses[0]);
+            }
+          );
+      }
     }
   );
+
+  socket.on("switch-here", async () => {});
 
   // Message Event
   socket.on("message", (data: { user: PeerDetailsType; roomName: string }) => {
