@@ -1,8 +1,7 @@
 import express from "express";
 
 import { validate, schedule } from "node-cron";
-import { exec, spawn } from "child_process";
-import { platform } from "os";
+const port = process.env.PORT || 4000;
 
 var cors = require("cors");
 const app = express();
@@ -43,14 +42,14 @@ app.use("/api", apis);
 
 // SSL cert for HTTPS access
 const options = {
-  key: fs.readFileSync("./src/ssl/key.pem", "utf-8"),
-  cert: fs.readFileSync("./src/ssl/cert.pem", "utf-8"),
+  // key: fs.readFileSync("./src/ssl/key.pem", "utf-8"),
+  // cert: fs.readFileSync("./src/ssl/cert.pem", "utf-8"),
 };
 
 const httpsServer = https.createServer(options, app);
 
-httpsServer.listen(3003, () => {
-  console.log("listening on port: " + 3003);
+httpsServer.listen(port, () => {
+  console.log("listening on port: " + port);
 });
 
 const io = new Server(httpsServer, {
