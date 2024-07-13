@@ -42,8 +42,8 @@ app.use("/api", apis);
 
 // SSL cert for HTTPS access
 const options = {
-  key: fs.readFileSync("./src/ssl/key.pem", "utf-8"),
-  cert: fs.readFileSync("./src/ssl/cert.pem", "utf-8"),
+  // key: fs.readFileSync("./src/ssl/key.pem", "utf-8"),
+  // cert: fs.readFileSync("./src/ssl/cert.pem", "utf-8"),
 };
 
 const httpsServer = https.createServer(options, app);
