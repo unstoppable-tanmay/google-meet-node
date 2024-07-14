@@ -1,7 +1,7 @@
 import express from "express";
 
 import { validate, schedule } from "node-cron";
-const port = process.env.PORT || 4000;
+import { config } from "dotenv";
 
 var cors = require("cors");
 const app = express();
@@ -26,6 +26,11 @@ import {
   settransports,
   transports,
 } from "./data/data";
+
+// dotenv
+config();
+
+const port = process.env.PORT || 4000;
 
 // middleware
 app.use(
