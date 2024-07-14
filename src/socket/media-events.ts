@@ -15,6 +15,7 @@ import { Transport } from "mediasoup/node/lib/Transport";
 import { Consumer } from "mediasoup/node/lib/Consumer";
 import { Producer } from "mediasoup/node/lib/Producer";
 import { Router } from "mediasoup/node/lib/types";
+import { getIp } from "../lib/getIp";
 
 export const mediaEvents = (socket: Socket) => {
   // Client emits a request to create server side Transport
@@ -192,8 +193,10 @@ export const mediaEvents = (socket: Socket) => {
             transportData.consumer &&
             transportData.transport.id == serverConsumerTransportId
         )!.transport;
-        const producer = producers.find(e=>e.producer.id===remoteProducerId)
-        console.log("Producer : ", producer)
+        const producer = producers.find(
+          (e) => e.producer.id === remoteProducerId
+        );
+        console.log("Producer : ", producer);
 
         // check if the router can consume the specified producer
         if (
@@ -287,7 +290,7 @@ const createWebRtcTransport = async (router: Router) => {
         listenIps: [
           {
             ip: "0.0.0.0", // replace with relevant IP address
-            announcedIp: "192.168.137.1",
+            announcedIp: getIp(),
           },
         ],
         enableUdp: true,
