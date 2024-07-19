@@ -2,13 +2,7 @@ import { Socket } from "socket.io";
 import { meets, peers } from "../data/data";
 import { Namespace } from "socket.io";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
-import {
-  MeetTransactType,
-  MeetType,
-  PeerDetailsType,
-  RoomSettings,
-  UserType,
-} from "../types/types";
+import { PeerDetailsType, RoomSettings, UserType } from "../types/types";
 
 export const manageEvents = (
   socket: Socket,
@@ -44,14 +38,29 @@ export const manageEvents = (
     }
   );
 
-  socket.on("switch-here", async () => {});
+  // switch to here
+  socket.on(
+    "switch-here",
+    async ({ roomName, socketId }: { roomName: string; socketId: string }) => {
+      if (meets[roomName]) {
+        const oldSocketId = meets[roomName].peers.find(
+          (e) => e.email == meets[roomName].admin.email
+        )?.socketId;
+
+        if (oldSocketId) socket.to(oldSocketId).emit("switching-to-another");
+      }
+    }
+  );
 
   // Message Event
-  socket.on("message", (data: { user: PeerDetailsType; roomName: string }) => {
-    connections.to(data.roomName).emit("message", data);
-  });
+  socket.on(
+    "message",
+    (data: { user: PeerDetailsType; roomName: string; message: string }) => {
+      connections.to(data.roomName).emit("message", data);
+    }
+  );
 
-  // Room Settings Update
+  // Room User Update
   socket.on(
     "user-update",
     ({
@@ -69,6 +78,20 @@ export const manageEvents = (
             return { ...e, ...data };
           } else return e;
         });
+
+        socket
+          .to(meets[roomName].peers.map((e) => e.socketId!))
+          .emit("meet-update", { meet: meets[roomName] });
+      }
+    }
+  );
+
+  // Room Setting Update
+  socket.on(
+    "setting-update",
+    ({ roomName, data }: { data: Partial<RoomSettings>; roomName: string }) => {
+      if (data && roomName) {
+        meets[roomName].settings = { ...meets[roomName].settings, ...data };
 
         socket
           .to(meets[roomName].peers.map((e) => e.socketId!))

@@ -32,6 +32,7 @@ export type PeersType = {
 };
 
 export type RoomSettings = {
+  hostManagement: boolean;
   shareScreen: boolean;
   sendChatMessage: boolean;
   sendReaction: boolean;

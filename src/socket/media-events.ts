@@ -15,7 +15,6 @@ import { Transport } from "mediasoup/node/lib/Transport";
 import { Consumer } from "mediasoup/node/lib/Consumer";
 import { Producer } from "mediasoup/node/lib/Producer";
 import { Router } from "mediasoup/node/lib/types";
-import { getIp, returnIps } from "../lib/getIp";
 
 export const mediaEvents = (socket: Socket) => {
   // Client emits a request to create server side Transport
@@ -287,7 +286,12 @@ const createWebRtcTransport = async (router: Router) => {
     try {
       // https://mediasoup.org/documentation/v3/mediasoup/api/#WebRtcTransportOptions
       const webRtcTransport_options = {
-        listenIps: returnIps(),
+        listenIps: [
+          {
+            ip: "0.0.0.0",
+            announcedIp: process.env.HOST_PUBLIC_IP ?? "192.168.137.1",
+          },
+        ],
         enableUdp: true,
         enableTcp: true,
         preferUdp: true,
