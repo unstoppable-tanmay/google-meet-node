@@ -12,18 +12,18 @@ I made this with SFU (Selective Forwarding Unit) and going to replicate 100% fea
 - Media Devices Control ✅
 - Video sharing - pause & resume ✅
 - Audio Sharing - pause & resume ✅
-- Screen Sharing - pause & resume ❌
-- Share Info ❌
+- Screen Sharing - pause & resume ✅
+- Share Info ✅
 - Emojies ❌
 - Hand raise ❌
 - Visual Effects ❌
 - Change Layout ❌
 - Caption ❌
-- Message ❌
+- Message ✅
 - Ask join - Admit/deny ✅
-- Room lock setting ❌
-- Users ❌
-- Activities ❌
+- Room lock setting ✅
+- Users ✅
+- Activities ✅
 - Annotating ❌
 - Sounds ❌
 - All Screens ❌
