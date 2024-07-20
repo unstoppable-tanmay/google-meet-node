@@ -15,6 +15,7 @@ const createMeetForLeterSchema = z.object({
     image: z.string().optional(),
   }),
   settings: z.object({
+    hostManagement: z.boolean(),
     shareScreen: z.boolean(),
     sendChatMessage: z.boolean(),
     sendReaction: z.boolean(),
@@ -64,6 +65,7 @@ const createMeetForLeterWithScheduleSchema = z.object({
     image: z.string().optional(),
   }),
   settings: z.object({
+    hostManagement: z.boolean(),
     shareScreen: z.boolean(),
     sendChatMessage: z.boolean(),
     sendReaction: z.boolean(),
