@@ -70,14 +70,39 @@ export const manageEvents = (
 
   // Raise Hand Event
   socket.on("raise", (data: { user: PeerDetailsType; roomName: string }) => {
-    connections.to(data.roomName).emit("raise", data);
+    meets[data.roomName].raisedPeers = [
+      ...meets[data.roomName].raisedPeers.filter(
+        (e) => e.socketId != data.user.socketId
+      ),
+      data.user,
+    ];
+    socket
+      .to(meets[data.roomName].peers.map((e) => e.socketId!))
+      .emit("meet-update", { meet: meets[data.roomName] });
   });
 
   // Down Hand Event
   socket.on(
     "down-raise",
     (data: { user: PeerDetailsType; roomName: string }) => {
-      connections.to(data.roomName).emit("down-raise", data);
+      meets[data.roomName].raisedPeers = [
+        ...meets[data.roomName].raisedPeers.filter(
+          (e) => e.socketId != data.user.socketId
+        ),
+      ];
+      socket
+        .to(meets[data.roomName].peers.map((e) => e.socketId!))
+        .emit("meet-update", { meet: meets[data.roomName] });
+    }
+  );
+
+  socket.on(
+    "down-raise-all",
+    (data: { user: PeerDetailsType; roomName: string }) => {
+      meets[data.roomName].raisedPeers = [];
+      socket
+        .to(meets[data.roomName].peers.map((e) => e.socketId!))
+        .emit("meet-update", { meet: meets[data.roomName] });
     }
   );
 
