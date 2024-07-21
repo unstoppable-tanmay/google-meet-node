@@ -15,15 +15,10 @@ export const getIp = () => {
       return;
     }
   });
-  console.log(localIp);
   return localIp;
 };
 
 export const returnIps = () => {
-  if (process.env.PUBLIC_IPS) {
-    return (JSON.parse(process.env.PUBLIC_IPS) as string[]).map((e) => ({
-      ip: "0.0.0.0",
-      announcedIp: e,
-    }));
-  } else return [{ ip: "0.0.0.0", announcedIp: getIp() }];
+  console.log([{ ip: "0.0.0.0", announcedIp: getIp() }]);
+  return [{ ip: "0.0.0.0", announcedIp: getIp() }];
 };
