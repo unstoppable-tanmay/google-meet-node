@@ -60,6 +60,61 @@ export const manageEvents = (
     }
   );
 
+  // Emojies Event
+  socket.on(
+    "emoji",
+    (data: { user: PeerDetailsType; roomName: string; emoji: string }) => {
+      connections.to(data.roomName).emit("emoji", data);
+    }
+  );
+
+  // Raise Hand Event
+  socket.on("raise", (data: { user: PeerDetailsType; roomName: string }) => {
+    connections.to(data.roomName).emit("raise", data);
+  });
+
+  // Down Hand Event
+  socket.on(
+    "down-raise",
+    (data: { user: PeerDetailsType; roomName: string }) => {
+      connections.to(data.roomName).emit("down-raise", data);
+    }
+  );
+
+  // Mute Someone
+  socket.on(
+    "off-mic-user",
+    (data: { user: PeerDetailsType; roomName: string }) => {
+      data.user.socketId && connections.to(data.user.socketId).emit("off-mic");
+    }
+  );
+
+  // Off Video Someone
+  socket.on(
+    "off-video-user",
+    (data: { user: PeerDetailsType; roomName: string }) => {
+      data.user.socketId &&
+        connections.to(data.user.socketId).emit("off-video");
+    }
+  );
+
+  // Off Screen Someone
+  socket.on(
+    "off-screen-user",
+    (data: { user: PeerDetailsType; roomName: string }) => {
+      data.user.socketId &&
+        connections.to(data.user.socketId).emit("off-screen");
+    }
+  );
+
+  // Off Screen Someone
+  socket.on(
+    "remove-user",
+    (data: { user: PeerDetailsType; roomName: string }) => {
+      data.user.socketId && connections.to(data.user.socketId).emit("remove");
+    }
+  );
+
   // Room User Update
   socket.on(
     "user-update",
