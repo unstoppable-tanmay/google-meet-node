@@ -14,7 +14,7 @@ I made this with SFU (Selective Forwarding Unit) and going to replicate 100% fea
 - Audio Sharing - pause & resume ✅
 - Screen Sharing - pause & resume ✅
 - Share Info ✅
-- Emojies ❌
+- Emojies ✅
 - Hand raise ❌
 - Visual Effects ❌
 - Change Layout ❌

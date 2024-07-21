@@ -46,7 +46,7 @@ export type AdminType = {
   name: string;
   email: string;
   image?: string;
-}
+};
 
 export type MeetTransactType = {
   peers: PeerDetailsType[];
@@ -60,6 +60,8 @@ export type MeetType = {
   [roomId: string]: {
     router: Router | null;
     peers: PeerDetailsType[];
+    raisedPeers: PeerDetailsType[];
+    askingpeers: PeerDetailsType[];
     allowedPeers: PeerDetailsType[];
     admin: AdminType;
     settings: RoomSettings;
