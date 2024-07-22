@@ -283,6 +283,7 @@ export const mediaEvents = (socket: Socket) => {
 };
 
 const createWebRtcTransport = async (router: Router) => {
+  console.log(JSON.parse(process.env.LISTIN_IPS || "{}"));
   return new Promise(async (resolve, reject) => {
     try {
       // https://mediasoup.org/documentation/v3/mediasoup/api/#WebRtcTransportOptions
@@ -290,8 +291,8 @@ const createWebRtcTransport = async (router: Router) => {
         listenIps: [
           {
             ip: getIp(),
-            // announcedIp: process.env.HOST_PUBLIC_IP ?? "192.168.137.1",
           },
+          ...JSON.parse(process.env.LISTIN_IPS || "[]"),
           // ...returnIps()
         ],
         enableUdp: true,
