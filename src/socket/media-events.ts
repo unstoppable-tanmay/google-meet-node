@@ -289,9 +289,10 @@ const createWebRtcTransport = async (router: Router) => {
       // https://mediasoup.org/documentation/v3/mediasoup/api/#WebRtcTransportOptions
       const webRtcTransport_options = {
         listenIps: [
-          {
-            ip: getIp(),
-          },
+          // {
+          //   ip: "0.0.0.0",
+          //   announcedIp: getIp(),
+          // },
           ...JSON.parse(process.env.LISTIN_IPS || "[]"),
           // ...returnIps()
         ],
